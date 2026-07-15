@@ -1,5 +1,6 @@
-import '@/styles/globals.css';
+import '../styles/globals.css';
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
   title: '宠物健康养护平台',
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="zh-CN">

@@ -1,7 +1,9 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/router';
-import { authApi } from '@/lib/api';
-import Alert from '@/components/Alert';
+import { authApi } from '../../lib/api';
+import Alert from '../../components/Alert';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -12,7 +14,7 @@ export default function LoginPage() {
   const [success, setSuccess] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -31,12 +33,12 @@ export default function LoginPage() {
 
     try {
       if (isRegister) {
-        const response = await authApi.register(username.trim(), password);
+        await authApi.register(username.trim(), password);
         setSuccess('注册成功，请登录');
         setIsRegister(false);
         setPassword('');
       } else {
-        const response = await authApi.login(username.trim(), password);
+        const response: any = await authApi.login(username.trim(), password);
         localStorage.setItem('token', response.data.access_token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         router.push('/pets');

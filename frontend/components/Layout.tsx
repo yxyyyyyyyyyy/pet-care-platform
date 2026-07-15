@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import { useState, useEffect, type ReactNode } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { User } from '../lib/api';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-export default function Layout({ children }: LayoutProps) {
-  const [user, setUser] = useState<any>(null);
+export default function Layout({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {

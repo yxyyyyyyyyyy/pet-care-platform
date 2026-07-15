@@ -1,16 +1,24 @@
+'use client';
+
 import axios from 'axios';
 
+const getBaseUrl = () => {
+  return process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000/api';
+};
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE,
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
@@ -18,10 +26,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+    if (typeof window !== 'undefined') {
+      if (error.response?.status === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
@@ -73,6 +83,27 @@ export interface CareAdvice {
   grooming: string;
 }
 
+export interface PetFormData {
+  name: string;
+  species: string;
+  breed: string;
+  age: string;
+  weight: string;
+  gender: string;
+  color: string;
+  birthday: string;
+  notes: string;
+}
+
+export interface CareRecordFormData {
+  pet_id: string;
+  record_type: string;
+  description: string;
+  date: string;
+  veterinarian: string;
+  cost: string;
+}
+
 export const authApi = {
   login: (username: string, password: string) =>
     api.post('/auth/login', { username, password }),
@@ -88,11 +119,19 @@ export const petsApi = {
   
   getById: (id: number) => api.get(`/pets/${id}`),
   
-  create: (data: Omit<Pet, 'id' | 'user_id' | 'created_at' | 'updated_at'>) =>
-    api.post('/pets', data),
+  create: (data: PetFormData) =>
+    api.post('/pets', {
+      ...data,
+      age: parseFloat(data.age),
+      weight: parseFloat(data.weight),
+    }),
   
-  update: (id: number, data: Partial<Pet>) =>
-    api.put(`/pets/${id}`, data),
+  update: (id: number, data: PetFormData) =>
+    api.put(`/pets/${id}`, {
+      ...data,
+      age: parseFloat(data.age),
+      weight: parseFloat(data.weight),
+    }),
   
   delete: (id: number) => api.delete(`/pets/${id}`),
 };
@@ -103,8 +142,14 @@ export const careApi = {
   
   getRecordById: (id: number) => api.get(`/care/records/${id}`),
   
-  createRecord: (data: Omit<CareRecord, 'id' | 'created_at' | 'updated_at'>) =>
-    api.post('/care/records', data),
+  createRecord: (data: {
+    pet_id: number;
+    record_type: string;
+    description?: string;
+    date: string;
+    veterinarian?: string;
+    cost?: number | null;
+  }) => api.post('/care/records', data),
   
   updateRecord: (id: number, data: Partial<CareRecord>) =>
     api.put(`/care/records/${id}`, data),

@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { careApi, petsApi, CareRecord, Pet, CareAdvice } from '@/lib/api';
-import Layout from '@/components/Layout';
-import AuthGuard from '@/components/AuthGuard';
-import Modal from '@/components/Modal';
-import Alert from '@/components/Alert';
+'use client';
+
+import { useState, useEffect, type FormEvent } from 'react';
+import { careApi, petsApi, CareRecord, Pet, CareAdvice } from '../../lib/api';
+import Layout from '../../components/Layout';
+import AuthGuard from '../../components/AuthGuard';
+import Modal from '../../components/Modal';
+import Alert from '../../components/Alert';
 
 export default function CarePage() {
   const [records, setRecords] = useState<CareRecord[]>([]);
@@ -37,7 +39,7 @@ export default function CarePage() {
 
   const fetchPets = async () => {
     try {
-      const response = await petsApi.getAll();
+      const response: any = await petsApi.getAll();
       setPets(response.data);
     } catch (err: any) {
       setError(err.response?.data?.message || '获取宠物列表失败');
@@ -46,7 +48,7 @@ export default function CarePage() {
 
   const fetchRecords = async (petId?: number) => {
     try {
-      const response = await careApi.getRecords(petId || undefined);
+      const response: any = await careApi.getRecords(petId || undefined);
       setRecords(response.data);
     } catch (err: any) {
       setError(err.response?.data?.message || '获取养护记录失败');
@@ -55,7 +57,7 @@ export default function CarePage() {
 
   const fetchAdvice = async (petId: number) => {
     try {
-      const response = await careApi.getAdvice(petId);
+      const response: any = await careApi.getAdvice(petId);
       setAdvice(response.data);
     } catch (err: any) {
       setError(err.response?.data?.message || '获取养护建议失败');
@@ -100,7 +102,7 @@ export default function CarePage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -114,8 +116,11 @@ export default function CarePage() {
 
     try {
       const data = {
-        ...formData,
         pet_id: parseInt(formData.pet_id),
+        record_type: formData.record_type,
+        description: formData.description || undefined,
+        date: formData.date,
+        veterinarian: formData.veterinarian || undefined,
         cost: formData.cost ? parseFloat(formData.cost) : null,
       };
 

@@ -1,12 +1,10 @@
-import React from 'react';
+'use client';
 
-interface AlertProps {
+export default function Alert({ type, message, onClose }: {
   type: 'success' | 'error' | 'info';
   message: string;
   onClose?: () => void;
-}
-
-export default function Alert({ type, message, onClose }: AlertProps) {
+}) {
   const className = `alert alert-${type}`;
 
   return (

@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/router';
 
-interface AuthGuardProps {
-  children: React.ReactNode;
-}
-
-export default function AuthGuard({ children }: AuthGuardProps) {
+export default function AuthGuard({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();

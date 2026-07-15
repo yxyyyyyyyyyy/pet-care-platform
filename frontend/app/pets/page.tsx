@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
-import { petsApi, Pet } from '@/lib/api';
-import Layout from '@/components/Layout';
-import AuthGuard from '@/components/AuthGuard';
-import Modal from '@/components/Modal';
-import Alert from '@/components/Alert';
+'use client';
+
+import { useState, useEffect, type FormEvent } from 'react';
+import { petsApi, Pet, PetFormData } from '../../lib/api';
+import Layout from '../../components/Layout';
+import AuthGuard from '../../components/AuthGuard';
+import Modal from '../../components/Modal';
+import Alert from '../../components/Alert';
 
 export default function PetsPage() {
   const [pets, setPets] = useState<Pet[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PetFormData>({
     name: '',
     species: '',
     breed: '',
@@ -30,7 +32,7 @@ export default function PetsPage() {
 
   const fetchPets = async () => {
     try {
-      const response = await petsApi.getAll();
+      const response: any = await petsApi.getAll();
       setPets(response.data);
     } catch (err: any) {
       setError(err.response?.data?.message || '获取宠物列表失败');
@@ -84,7 +86,7 @@ export default function PetsPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
