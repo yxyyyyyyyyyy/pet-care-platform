@@ -171,11 +171,11 @@ export default function CarePage() {
   return (
     <AuthGuard>
       <Layout>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-[55%_42%] lg:gap-x-[3%] gap-y-6">
+          <div className="care-main-card">
             <div className="card">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">养护记录</h2>
+              <div className="card-header">
+                <h2 className="card-title">📝 养护记录</h2>
                 <button
                   onClick={() => handleOpenModal()}
                   className="btn btn-primary"
@@ -205,8 +205,10 @@ export default function CarePage() {
               {success && <Alert type="success" message={success} onClose={() => setSuccess('')} />}
 
               {records.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  暂无养护记录，点击上方按钮添加
+                <div className="empty-state">
+                  <div className="icon">📋</div>
+                  <h3>暂无养护记录</h3>
+                  <p>点击上方按钮，记录毛孩子的健康状况吧~</p>
                 </div>
               ) : (
                 <table className="table">
@@ -231,7 +233,7 @@ export default function CarePage() {
                           <td>{record.veterinarian || '-'}</td>
                           <td>{record.cost ? `¥${record.cost}` : '-'}</td>
                           <td>
-                            <div className="flex gap-2">
+                            <div className="btn-group">
                               <button
                                 onClick={() => handleOpenModal(record)}
                                 className="btn btn-outline btn-sm"
@@ -255,9 +257,9 @@ export default function CarePage() {
             </div>
           </div>
 
-          <div className="lg:col-span-1">
-            <div className="card">
-              <h2 className="text-xl font-bold mb-4">养护建议</h2>
+          <div className="care-side-card">
+            <div className="advice-card">
+              <h2 className="card-title mb-4">💡 养护建议</h2>
               <div className="form-group">
                 <label>选择宠物获取建议</label>
                 <select
@@ -276,45 +278,45 @@ export default function CarePage() {
 
               {advice && (
                 <div className="mt-4">
-                  <div className="bg-indigo-50 p-3 rounded mb-3">
-                    <h3 className="font-semibold text-indigo-800 mb-1">
-                      {advice.pet.name} ({advice.pet.species})
-                    </h3>
-                    <p className="text-sm text-indigo-600">
-                      年龄阶段：{getAgeStageText(advice.age_stage)} | {advice.weight_advice}
-                    </p>
+                  <div className="advice-pet-info">
+                    <h3>{advice.pet.name} ({advice.pet.species})</h3>
+                    <p>年龄阶段：{getAgeStageText(advice.age_stage)} | {advice.weight_advice}</p>
                   </div>
 
                   <div className="space-y-3">
-                    <div className="border-l-4 border-green-500 pl-3">
-                      <h4 className="font-medium text-gray-800">🍽️ 饮食建议</h4>
-                      <p className="text-sm text-gray-600">{advice.feeding}</p>
+                    <div className="advice-item feeding">
+                      <h4>🍽️ 饮食建议</h4>
+                      <p>{advice.feeding}</p>
                     </div>
-                    <div className="border-l-4 border-blue-500 pl-3">
-                      <h4 className="font-medium text-gray-800">🏃 运动建议</h4>
-                      <p className="text-sm text-gray-600">{advice.exercise}</p>
+                    <div className="advice-item exercise">
+                      <h4>🏃 运动建议</h4>
+                      <p>{advice.exercise}</p>
                     </div>
-                    <div className="border-l-4 border-red-500 pl-3">
-                      <h4 className="font-medium text-gray-800">💊 健康建议</h4>
-                      <p className="text-sm text-gray-600">{advice.health}</p>
+                    <div className="advice-item health">
+                      <h4>💊 健康建议</h4>
+                      <p>{advice.health}</p>
                     </div>
-                    <div className="border-l-4 border-purple-500 pl-3">
-                      <h4 className="font-medium text-gray-800">✂️ 美容建议</h4>
-                      <p className="text-sm text-gray-600">{advice.grooming}</p>
+                    <div className="advice-item grooming">
+                      <h4>✂️ 美容建议</h4>
+                      <p>{advice.grooming}</p>
                     </div>
                   </div>
                 </div>
               )}
 
               {!advice && pets.length > 0 && (
-                <div className="text-center py-8 text-gray-500">
-                  请选择宠物查看养护建议
+                <div className="empty-state">
+                  <div className="icon">🐾</div>
+                  <h3>请选择宠物</h3>
+                  <p>选择您的毛孩子，获取专属养护建议~</p>
                 </div>
               )}
 
               {pets.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
-                  暂无宠物，请先添加宠物档案
+                <div className="empty-state">
+                  <div className="icon">🐕</div>
+                  <h3>暂无宠物</h3>
+                  <p>请先添加宠物档案~</p>
                 </div>
               )}
             </div>

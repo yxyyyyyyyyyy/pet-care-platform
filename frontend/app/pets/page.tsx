@@ -139,8 +139,8 @@ export default function PetsPage() {
     <AuthGuard>
       <Layout>
         <div className="card">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">宠物档案管理</h2>
+          <div className="card-header">
+            <h2 className="card-title">🐾 宠物档案管理</h2>
             <button
               onClick={() => handleOpenModal()}
               className="btn btn-primary"
@@ -153,8 +153,10 @@ export default function PetsPage() {
           {success && <Alert type="success" message={success} onClose={() => setSuccess('')} />}
 
           {pets.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              暂无宠物信息，点击上方按钮添加
+            <div className="empty-state">
+              <div className="icon">🐕</div>
+              <h3>还没有宠物档案</h3>
+              <p>点击上方按钮，为您的毛孩子创建档案吧~</p>
             </div>
           ) : (
             <table className="table">
@@ -179,7 +181,7 @@ export default function PetsPage() {
                     <td>{pet.weight}</td>
                     <td>{pet.gender === 'male' ? '公' : '母'}</td>
                     <td>
-                      <div className="flex gap-2">
+                      <div className="btn-group">
                         <button
                           onClick={() => handleOpenModal(pet)}
                           className="btn btn-outline btn-sm"

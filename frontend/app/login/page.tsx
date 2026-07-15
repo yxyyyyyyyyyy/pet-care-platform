@@ -51,11 +51,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="card w-full max-w-md">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">🐾 宠物健康养护平台</h1>
-          <p className="text-gray-500">{isRegister ? '创建新账户' : '登录您的账户'}</p>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <h1>🐾 宠物健康养护平台</h1>
+          <p>{isRegister ? '创建新账户' : '登录您的账户'}</p>
         </div>
 
         {error && <Alert type="error" message={error} onClose={() => setError('')} />}
@@ -91,24 +91,18 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="login-switch">
           {isRegister ? (
             <>
               已有账户？{' '}
-              <button
-                onClick={() => setIsRegister(false)}
-                className="text-indigo-600 hover:underline"
-              >
+              <button onClick={() => setIsRegister(false)}>
                 立即登录
               </button>
             </>
           ) : (
             <>
               还没有账户？{' '}
-              <button
-                onClick={() => setIsRegister(true)}
-                className="text-indigo-600 hover:underline"
-              >
+              <button onClick={() => setIsRegister(true)}>
                 立即注册
               </button>
             </>
