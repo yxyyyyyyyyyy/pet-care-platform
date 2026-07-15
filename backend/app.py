@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
@@ -10,12 +10,38 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['JWT_IDENTITY_CLAIM'] = 'sub'
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+instance_dir = os.path.join(basedir, 'instance')
+os.makedirs(instance_dir, exist_ok=True)
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(instance_dir, "pet_care.db")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 jwt.init_app(app)
-CORS(app, origins=['http://localhost:3000'], supports_credentials=True)
+
+@jwt.unauthorized_loader
+def unauthorized_response(callback):
+    return jsonify({'code': 401, 'msg': '登录失效'}), 401
+
+@jwt.invalid_token_loader
+def invalid_token_response(error_string):
+    return jsonify({'code': 401, 'msg': '登录失效'}), 401
+
+@jwt.expired_token_loader
+def expired_token_response(header, payload):
+    return jsonify({'code': 401, 'msg': '登录失效'}), 401
+
+@jwt.revoked_token_loader
+def revoked_token_response(header, payload):
+    return jsonify({'code': 401, 'msg': '登录失效'}), 401
+
+CORS(app, 
+     origins=['http://localhost:3000', 'http://localhost:3001'], 
+     supports_credentials=True,
+     allow_headers=['Content-Type', 'Authorization'],
+     methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
 
 register_error_handlers(app)
 

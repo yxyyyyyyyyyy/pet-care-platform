@@ -76,10 +76,10 @@ def get_weight_advice(species, weight):
             return '偏胖，建议控制饮食，增加运动'
     return ''
 
-@care_bp.route('/records', methods=['GET'])
+@care_bp.route('records', methods=['GET'])
 @jwt_required()
 def get_care_records():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     pet_id = request.args.get('pet_id')
     
     if pet_id:
@@ -94,10 +94,10 @@ def get_care_records():
     
     return jsonify([record.to_dict() for record in records]), 200
 
-@care_bp.route('/records/<int:record_id>', methods=['GET'])
+@care_bp.route('records/<int:record_id>', methods=['GET'])
 @jwt_required()
 def get_care_record(record_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     record = CareRecord.query.get(record_id)
     
     if not record:
@@ -109,12 +109,12 @@ def get_care_record(record_id):
     
     return jsonify(record.to_dict()), 200
 
-@care_bp.route('/records', methods=['POST'])
+@care_bp.route('records', methods=['POST'])
 @jwt_required()
 @validate_json('pet_id', 'record_type', 'date')
 @validate_numeric_fields('cost')
 def create_care_record():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json()
     
     pet_id = data['pet_id']
@@ -148,11 +148,11 @@ def create_care_record():
     
     return jsonify({'message': '创建成功', 'record': record.to_dict()}), 201
 
-@care_bp.route('/records/<int:record_id>', methods=['PUT'])
+@care_bp.route('records/<int:record_id>', methods=['PUT'])
 @jwt_required()
 @validate_numeric_fields('cost')
 def update_care_record(record_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     record = CareRecord.query.get(record_id)
     
     if not record:
@@ -189,10 +189,10 @@ def update_care_record(record_id):
     
     return jsonify({'message': '更新成功', 'record': record.to_dict()}), 200
 
-@care_bp.route('/records/<int:record_id>', methods=['DELETE'])
+@care_bp.route('records/<int:record_id>', methods=['DELETE'])
 @jwt_required()
 def delete_care_record(record_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     record = CareRecord.query.get(record_id)
     
     if not record:
@@ -207,10 +207,10 @@ def delete_care_record(record_id):
     
     return jsonify({'message': '删除成功'}), 200
 
-@care_bp.route('/advice/<int:pet_id>', methods=['GET'])
+@care_bp.route('advice/<int:pet_id>', methods=['GET'])
 @jwt_required()
 def get_care_advice(pet_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     pet = Pet.query.filter_by(id=pet_id, user_id=user_id).first()
     
     if not pet:

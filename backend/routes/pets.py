@@ -1,22 +1,23 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from datetime import date
 from extensions import db
 from models.pet import Pet
 from utils.decorators import validate_json, validate_numeric_fields
 
 pets_bp = Blueprint('pets', __name__)
 
-@pets_bp.route('/', methods=['GET'])
+@pets_bp.route('', methods=['GET'])
 @jwt_required()
 def get_pets():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     pets = Pet.query.filter_by(user_id=user_id).all()
     return jsonify([pet.to_dict() for pet in pets]), 200
 
 @pets_bp.route('/<int:pet_id>', methods=['GET'])
 @jwt_required()
 def get_pet(pet_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     pet = Pet.query.filter_by(id=pet_id, user_id=user_id).first()
     
     if not pet:
@@ -24,12 +25,12 @@ def get_pet(pet_id):
     
     return jsonify(pet.to_dict()), 200
 
-@pets_bp.route('/', methods=['POST'])
+@pets_bp.route('', methods=['POST'])
 @jwt_required()
 @validate_json('name', 'species', 'age', 'weight', 'gender')
 @validate_numeric_fields('age', 'weight')
 def create_pet():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json()
     
     name = data['name'].strip()
@@ -50,6 +51,9 @@ def create_pet():
     if gender not in ['male', 'female']:
         return jsonify({'error': '创建失败', 'message': '性别只能是male或female'}), 400
     
+    birthday_str = data.get('birthday')
+    birthday_date = date.fromisoformat(birthday_str) if birthday_str and birthday_str.strip() else None
+    
     pet = Pet(
         user_id=user_id,
         name=name,
@@ -59,7 +63,7 @@ def create_pet():
         weight=weight,
         gender=gender,
         color=data.get('color'),
-        birthday=data.get('birthday'),
+        birthday=birthday_date,
         avatar=data.get('avatar'),
         notes=data.get('notes')
     )
@@ -73,7 +77,7 @@ def create_pet():
 @jwt_required()
 @validate_numeric_fields('age', 'weight')
 def update_pet(pet_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     pet = Pet.query.filter_by(id=pet_id, user_id=user_id).first()
     
     if not pet:
@@ -118,7 +122,8 @@ def update_pet(pet_id):
         pet.color = data['color']
     
     if 'birthday' in data:
-        pet.birthday = data['birthday']
+        birthday_str = data['birthday']
+        pet.birthday = date.fromisoformat(birthday_str) if birthday_str and birthday_str.strip() else None
     
     if 'avatar' in data:
         pet.avatar = data['avatar']
@@ -133,7 +138,7 @@ def update_pet(pet_id):
 @pets_bp.route('/<int:pet_id>', methods=['DELETE'])
 @jwt_required()
 def delete_pet(pet_id):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     pet = Pet.query.filter_by(id=pet_id, user_id=user_id).first()
     
     if not pet:
