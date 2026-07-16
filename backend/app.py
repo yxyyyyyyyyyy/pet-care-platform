@@ -37,8 +37,10 @@ def expired_token_response(header, payload):
 def revoked_token_response(header, payload):
     return jsonify({'code': 401, 'msg': '登录失效'}), 401
 
+allowed_origins = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001').split(',')
+
 CORS(app, 
-     origins=['http://localhost:3000', 'http://localhost:3001'], 
+     origins=allowed_origins,
      supports_credentials=True,
      allow_headers=['Content-Type', 'Authorization'],
      methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
@@ -57,7 +59,9 @@ app.register_blueprint(care_bp, url_prefix='/api/care')
 def health_check():
     return {'status': 'ok'}
 
+with app.app_context():
+    db.create_all()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=debug_mode)

@@ -171,3 +171,22 @@
 - 修改 frontend/styles/globals.css：表格添加table-layout:auto、word-break:break-word、white-space:normal防止横向溢出；单元格padding增大到16px 18px；养护建议卡片添加hover效果和过渡动画；添加.care-main-card和.care-side-card类设置min-width:0
 
 ✅【落地结果】页面无横向滚动，布局均衡（左侧55%，右侧42%），原有增删改查功能保持不变，关联Git提交备注：fix: 优化养护记录页面布局，修复表格横向溢出问题
+
+### 2026-07-16
+**任务主题：项目线上部署全套适配（Render后端+Vercel前端）**
+
+**需求背景**：满足实训评分线上可访问要求，生成部署配置、适配线上接口请求、输出分步部署文档
+
+📝【用户原始Prompt】
+针对当前pet-care-platform全栈项目，完成前后端免费平台部署适配，后端部署Render、前端部署Vercel，生成并写入全部部署配置文件，同时修改前端请求代码兼容线上环境，需求明细：1. 后端backend目录操作：1）新建render.yaml Render部署配置文件，适配Flask+gunicorn启动；2）完善requirements.txt，补充gunicorn部署依赖；3）修改app.py，生产环境关闭debug，允许0.0.0.0访问，启动时自动创建数据库表；4）规范.env环境变量说明，标注Render后台需要填写的全部参数。2. 前端frontend目录操作：1）修改lib/api.ts，接口地址改为读取环境变量NEXT_PUBLIC_API_BASE，区分本地localhost和线上后端地址；2）新建.env.local本地环境文件示例，本地开发填127.0.0.1:5000；3）补充next.config.js跨域代理配置，解决线上CORS跨域报错。3. 输出完整分步部署教程：① Render部署Flask后端完整操作步骤；② Vercel部署Next.js前端完整操作步骤；③ 前后端联动配置流程（后端拿到公网地址后填入Vercel环境变量）。4. 额外说明SQLite免费Render的缺陷（重启清空数据），给出临时演示解决方案。5. 所有原有业务代码、接口逻辑、页面样式完全保留，仅新增/修改部署相关配置，不改动现有功能。全部文件生成完毕后，输出完整部署操作文档给我。
+
+🤖【AI方案概要】
+- backend/新增 render.yaml 部署配置
+- backend/更新 requirements.txt，补充gunicorn依赖
+- backend/修改 app.py，生产环境适配：CORS读取环境变量、自动创建数据库表、关闭debug、支持PORT环境变量
+- frontend/lib/api.ts 改造为环境变量读取线上API地址
+- frontend/新增 .env.local 本地环境配置模板
+- frontend/完善 next.config.js 跨域代理
+- docs/新建《部署指南.md》完整分步部署操作文档
+
+✅【落地结果】项目具备一键线上部署能力，可满足评分标准线上可访问要求，无需本地录屏替代验证，关联Git提交备注：feat: 新增Render+Vercel全套线上部署配置与部署教程，适配线上环境接口请求
