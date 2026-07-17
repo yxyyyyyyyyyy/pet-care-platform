@@ -2,16 +2,19 @@
 const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
-    if (!process.env.NEXT_PUBLIC_API_BASE) {
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE;
+    
+    if (!apiBase || apiBase.trim() === '') {
       return [];
     }
+    
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_BASE}/:path*`,
+        destination: `${apiBase}/:path*`,
       },
-    ] 
+    ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
