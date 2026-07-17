@@ -37,7 +37,7 @@ def expired_token_response(header, payload):
 def revoked_token_response(header, payload):
     return jsonify({'code': 401, 'msg': '登录失效'}), 401
 
-allowed_origins = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001').split(',')
+allowed_origins = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001,https://6a5a007f254dbe71bf3bb588--lively-pixie-b2837b.netlify.app').split(',')
 
 CORS(app, 
      origins=allowed_origins,
