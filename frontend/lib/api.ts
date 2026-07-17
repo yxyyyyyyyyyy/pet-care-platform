@@ -2,14 +2,14 @@
 
 import axios from 'axios';
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE || 'https://yxyyy.pythonanywhere.com/api';
+const baseUrl = 'http://127.0.0.1:5000/api';
 
 const api = axios.create({
   baseURL: baseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
+  withCredentials: false,
 });
 
 api.interceptors.request.use((config) => {

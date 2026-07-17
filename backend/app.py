@@ -9,7 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# ==================== 新增密钥配置 ====================
+# ==================== 密钥配置 ====================
 app.config['SECRET_KEY'] = 'pet123secretkey789xyzabc'
 app.config['JWT_SECRET_KEY'] = 'jwtpetlogin987654321zzz'
 # ==================== 密钥配置结束 ====================
@@ -41,9 +41,8 @@ def expired_token_response(header, payload):
 def revoked_token_response(header, payload):
     return jsonify({'code': 401, 'msg': '登录失效'}), 401
 
-CORS(app, 
-     resources={r"/*": {"origins": ["http://localhost:3000", "https://*.netlify.app"]}}, 
-     supports_credentials=True)
+# 万能本地CORS，关闭凭证，不再校验origin，彻底杜绝跨域拦截
+CORS(app, origins="*", supports_credentials=False)
 
 register_error_handlers(app)
 

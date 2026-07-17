@@ -4,7 +4,7 @@ import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Alert from '../../components/Alert';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || 'https://yxyyy.pythonanywhere.com/api';
+const BASE_URL = 'http://127.0.0.1:5000';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -34,12 +34,11 @@ export default function LoginPage() {
 
     try {
       if (isRegister) {
-        const response = await fetch(`${BASE_URL}/auth/register`, {
+        const response = await fetch(`${BASE_URL}/api/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
           body: JSON.stringify({ username: username.trim(), password }),
         });
 
@@ -52,12 +51,11 @@ export default function LoginPage() {
         setIsRegister(false);
         setPassword('');
       } else {
-        const response = await fetch(`${BASE_URL}/auth/login`, {
+        const response = await fetch(`${BASE_URL}/api/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
           body: JSON.stringify({ username: username.trim(), password }),
         });
 
