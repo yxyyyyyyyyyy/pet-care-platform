@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [isRegister, setIsRegister] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [success, setSuccess] = useState(''); 
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
