@@ -2,12 +2,10 @@
 
 import axios from 'axios';
 
-const getBaseUrl = () => {
-  return process.env.NEXT_PUBLIC_API_BASE;
-};
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE || 'https://yxyyy.pythonanywhere.com/api';
 
 const api = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: baseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
