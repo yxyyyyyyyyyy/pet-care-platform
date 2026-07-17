@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const getBaseUrl = () => {
-  return process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000/api';
+  return process.env.NEXT_PUBLIC_API_BASE;
 };
 
 const api = axios.create({
