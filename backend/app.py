@@ -9,8 +9,11 @@ load_dotenv()
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'pet-platform-secret-key-abc123456789xyz')
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'jwt-token-pet-care-987654321zzz')
+# ==================== 新增密钥配置 ====================
+app.config['SECRET_KEY'] = 'pet123secretkey789xyzabc'
+app.config['JWT_SECRET_KEY'] = 'jwtpetlogin987654321zzz'
+# ==================== 密钥配置结束 ====================
+
 app.config['JWT_IDENTITY_CLAIM'] = 'sub'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
