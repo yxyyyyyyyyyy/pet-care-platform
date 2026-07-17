@@ -8,8 +8,9 @@ from utils.error_handler import register_error_handlers
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'pet-platform-secret-key-abc123456789xyz')
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'jwt-token-pet-care-987654321zzz')
 app.config['JWT_IDENTITY_CLAIM'] = 'sub'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
