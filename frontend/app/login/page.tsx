@@ -2,8 +2,9 @@
 
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { authApi } from '../../lib/api';
 import Alert from '../../components/Alert';
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || 'https://yxyyy.pythonanywhere.com/api';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -33,18 +34,45 @@ export default function LoginPage() {
 
     try {
       if (isRegister) {
-        await authApi.register(username.trim(), password);
+        const response = await fetch(`${BASE_URL}/auth/register`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({ username: username.trim(), password }),
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.message || '注册失败');
+        }
+
         setSuccess('注册成功，请登录');
         setIsRegister(false);
         setPassword('');
       } else {
-        const response: any = await authApi.login(username.trim(), password);
-        localStorage.setItem('token', response.data.access_token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        const response = await fetch(`${BASE_URL}/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({ username: username.trim(), password }),
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.message || '登录失败');
+        }
+
+        const data = await response.json();
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user', JSON.stringify(data.user));
         router.push('/pets');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || '操作失败，请重试');
+      setError(err.message || '操作失败，请重试');
     } finally {
       setLoading(false);
     }
