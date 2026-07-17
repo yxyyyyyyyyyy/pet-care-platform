@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# 适配Next.js必备插件，解决404页面丢失
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# 路由重定向，所有网址交给Next前端处理，彻底解决Page not found
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
