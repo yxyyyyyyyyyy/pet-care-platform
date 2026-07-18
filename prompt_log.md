@@ -190,3 +190,31 @@
 - docs/新建《部署指南.md》完整分步部署操作文档
 
 ✅【落地结果】项目具备一键线上部署能力，可满足评分标准线上可访问要求，无需本地录屏替代验证，关联Git提交备注：feat: 新增Render+Vercel全套线上部署配置与部署教程，适配线上环境接口请求
+
+### 2026-07-17
+**任务主题：线上部署问题排查与本地运行恢复**
+
+**需求背景**：线上部署后出现跨域、接口路径不匹配等问题，导致无法正常访问，最终决定放弃线上部署，恢复本地开发环境
+
+**问题分析**：
+1. 前端登录/注册请求路径缺少 `/api` 前缀，与后端路由不匹配
+2. 前端请求携带 `credentials: 'include'`，与后端 `supports_credentials=False` 冲突
+3. axios 配置 `withCredentials: true`，导致跨域预检失败
+4. 线上部署环境复杂（Render免费实例限制、Vercel环境变量配置），调试困难
+
+**解决方案**：
+- 放弃线上部署方案，恢复纯本地开发模式
+- 修改后端CORS配置为最简模式：`CORS(app, origins="*", supports_credentials=False)`
+- 修复前端登录/注册请求路径，添加 `/api` 前缀
+- 删除前端请求中的 `credentials: 'include'`
+- 修改 axios 配置 `withCredentials: false`
+
+📝【用户原始Prompt】
+修改前端两处代码适配本地联调： 1. 全局接口BASE_URL改成本地后端地址：const BASE_URL = "http://127.0.0.1:5000"; 2. 找到登录页面fetch请求，完整替换为下面代码，必须带上credentials: "include"： fetch(`${BASE_URL}/api/auth/login`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ username, password }) }) 修改完成后，分两个终端启动项目： 终端1（后端）： cd backend pip install -r requirements.txt python app.py 终端2（前端，拆分新终端不关闭后端）： cd frontend npm install npm run dev 两个服务全部启动成功后打开http://localhost:3000/login测试登录，账号yxyyy，密码123456，有报错的话直接帮我恢复本地，放弃前后端部署
+
+🤖【AI方案概要】
+- 修改 backend/app.py：CORS改为最简通用模式
+- 修改 frontend/app/login/page.tsx：登录/注册路径添加/api前缀，删除credentials
+- 修改 frontend/lib/api.ts：axios withCredentials改为false
+
+✅【落地结果】本地运行环境恢复正常，前后端可正常通信，关联Git提交备注：fix: 修复本地跨域问题，恢复本地运行环境
