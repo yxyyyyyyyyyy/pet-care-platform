@@ -97,6 +97,8 @@ pet-care-platform/
 │   │   └── api.ts               # API 封装
 │   ├── styles/                  # 全局样式
 │   │   └── globals.css
+│   ├── .env.local               # 本地环境变量配置
+│   ├── next.config.js           # Next.js 配置
 │   └── package.json
 ├── backend/                     # Flask 后端应用
 │   ├── models/                  # 数据库模型
@@ -110,11 +112,20 @@ pet-care-platform/
 │   ├── utils/                   # 工具函数
 │   │   ├── decorators.py        # 验证装饰器
 │   │   └── error_handler.py     # 全局异常处理
+│   ├── instance/                # SQLite 数据库目录
+│   │   └── pet_care.db          # 数据库文件
 │   ├── app.py                   # 应用入口
 │   ├── extensions.py            # 扩展初始化
+│   ├── render.yaml              # Render 部署配置
+│   ├── .env                     # 环境变量配置
 │   └── requirements.txt         # 依赖清单
 ├── docs/                        # 项目文档
+│   ├── 项目总结.md               # 项目开发总结
+│   ├── 部署指南.md               # 线上部署教程
+│   └── 个人实训总结报告.md        # 个人实训报告
 ├── screenshots/                 # 截图文件夹
+├── videos/                      # 项目演示录屏
+├── .gitattributes               # Git LFS 配置
 ├── prompt_log.md                # AI 协作记录
 └── README.md                    # 项目说明
 ```
