@@ -97,19 +97,26 @@ pet-care-platform/
 │   │   └── api.ts               # API 封装
 │   ├── styles/                  # 全局样式
 │   │   └── globals.css
+│   ├── .env                     # 环境变量配置
 │   ├── .env.local               # 本地环境变量配置
+│   ├── netlify.toml             # Netlify 部署配置
 │   ├── next.config.js           # Next.js 配置
-│   └── package.json
+│   ├── tsconfig.json            # TypeScript 配置
+│   ├── package.json             # 依赖配置
+│   └── package-lock.json        # 依赖锁文件
 ├── backend/                     # Flask 后端应用
 │   ├── models/                  # 数据库模型
+│   │   ├── __init__.py
 │   │   ├── user.py              # 用户模型
 │   │   ├── pet.py               # 宠物模型
 │   │   └── care_record.py       # 养护记录模型
 │   ├── routes/                  # 路由模块
+│   │   ├── __init__.py
 │   │   ├── auth.py              # 认证接口
 │   │   ├── pets.py              # 宠物接口
 │   │   └── care.py              # 养护接口
 │   ├── utils/                   # 工具函数
+│   │   ├── __init__.py
 │   │   ├── decorators.py        # 验证装饰器
 │   │   └── error_handler.py     # 全局异常处理
 │   ├── instance/                # SQLite 数据库目录
@@ -121,10 +128,22 @@ pet-care-platform/
 │   └── requirements.txt         # 依赖清单
 ├── docs/                        # 项目文档
 │   ├── 项目总结.md               # 项目开发总结
-│   └── 个人实训总结报告.md        # 个人实训报告
+│   ├── 个人实训总结报告.md        # 个人实训报告
+│   ├── api_doc.md               # API 接口文档
+│   └── 调试日志.md               # 调试记录
 ├── screenshots/                 # 截图文件夹
+│   ├── login.jpg                # 登录页面截图
+│   ├── pet_list.jpg             # 宠物列表截图
+│   ├── pet_add_modal.jpg        # 新增宠物弹窗截图
+│   ├── pet_edit_modal.jpg       # 编辑宠物弹窗截图
+│   ├── care_page.jpg            # 养护记录主页截图
+│   ├── care_add_modal.jpg       # 添加养护记录弹窗截图
+│   ├── care_select.jpg          # 宠物选择下拉框截图
+│   └── care_suggestion.jpg      # 养护建议展示截图
 ├── videos/                      # 项目演示录屏
+│   └── 演示视频.mp4             # 项目功能演示视频
 ├── .gitattributes               # Git LFS 配置
+├── backend.zip                  # 后端代码压缩包
 ├── prompt_log.md                # AI 协作记录
 └── README.md                    # 项目说明
 ```
